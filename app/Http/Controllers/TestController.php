@@ -109,8 +109,20 @@ class TestController extends Controller
             $return_errlogin_info['msg']="要加雙引號,逗號和{}";
             echo json_encode((array)$return_errlogin_info);
         } else {
-            $log=DB::table('tests')->where('id', $r['id'])->delete();
-            return json_encode((array)$r['id']);
+          if (Auth::check()&&$verify){
+            $msgaccount=Auth::User()->email;
+            $useradmin=DB::table('tests')->where('id', $r['id'])->value('email');
+            if($msgaccount==$useradmin){
+              $log=DB::table('tests')->where('id', $r['id'])->delete();
+              return json_encode((array)$r);
+            }else{
+              $return_errlogin_info['msg']="只能編輯自己的留言";
+              return json_encode((array)$return_errlogin_info);
+            }
+          }else{
+            $return_errlogin_info['msg']="請先登入或執行信箱驗證";
+            return json_encode((array)$return_errlogin_info);
+          }
         }
     }
     public function updat(Request $request)
@@ -134,9 +146,8 @@ class TestController extends Controller
             $validator = Validator::make(
                 $r,
                 [//驗證
-            'id'         => ['required','alpha_num','max:50'],
-          ]
-            );
+                  'id'         => ['required','alpha_num','max:50'],
+                ]);
             if ($validator->fails()) {
                 $return_err=array_merge_recursive((array)$return_err, (array)$return_errmsg_info);
                 foreach ($validator->messages()->all() as $message) {//直接validator取的錯誤值
@@ -146,8 +157,21 @@ class TestController extends Controller
                 }
                 echo json_encode((array)$return_err);
             } else {
-                $log=DB::table('tests')->where('id', $r['id'])->first();
-                return json_encode((array)$log);
+              $verify=Auth::User()->email_verified_at;
+              if (Auth::check()&&$verify){
+                $msgaccount=Auth::User()->email;
+                $useradmin=DB::table('tests')->where('id', $r['id'])->value('email');
+                if($msgaccount==$useradmin){
+                  $log=DB::table('tests')->where('id', $r['id'])->first();
+                  return json_encode((array)$log);
+                }else{
+                  $return_errlogin_info['msg']="只能編輯自己的留言";
+                  return json_encode((array)$return_errlogin_info);
+                }
+              }else{
+                $return_errlogin_info['msg']="請先登入或執行信箱驗證";
+                return json_encode((array)$return_errlogin_info);
+              }
             }
         }
     }
@@ -189,9 +213,9 @@ class TestController extends Controller
                 echo json_encode((array)$return_err);
             } else {
                 $pro = DB::table('tests')->where('id', $r['id'])->update([
-              "title"  =>$r['title'],
-              "msg"    =>$r['msg']
-            ]);
+                  "title"  =>$r['title'],
+                  "msg"    =>$r['msg']
+                ]);
                 $pro = DB::table('tests')->where('id', $r['id'])->first();
                 echo json_encode((array)$pro);
             }

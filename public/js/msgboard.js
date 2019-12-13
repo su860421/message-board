@@ -69,6 +69,7 @@ $(document).ready(function() { //-----------------------------------------------
 
     })
 });
+
 function del(item) { //--------------------------------------------------刪除
     $.ajax({
             url: "/deletemsg",
@@ -79,9 +80,13 @@ function del(item) { //--------------------------------------------------刪除
             }
         })
         .done(function(item) {
-            var el = document.getElementById(item);
-            //console.log(item);
-            el.remove();
+            if (!item.id) {
+                alert(item.msg);
+            } else {
+                var el = document.getElementById(item.id);
+                //console.log(item);
+                el.remove();
+            }
         })
         .fail(function(err) {
             alert("错誤");
@@ -98,10 +103,14 @@ function updat(item) { //---------------------------------------------浮動視�
             }
         })
         .done(function(update) {
-            document.getElementById('modify').name = update.id;
-            document.getElementById('modalmsg').placeholder = update.msg;
-            document.getElementById('modaltitle').placeholder = update.title;
-            $('#myModal').modal('show')
+            if (!update.id) {
+                alert(update.msg);
+            } else {
+                document.getElementById('modify').name = update.id;
+                document.getElementById('modalmsg').placeholder = update.msg;
+                document.getElementById('modaltitle').placeholder = update.title;
+                $('#myModal').modal('show')
+            }
         })
         .fail(function(err) {
             alert("错誤");
@@ -121,9 +130,13 @@ $(document).ready(function() {
                 }
             })
             .done(function(returnmsg) {
-                var el = returnmsg.id;
-                document.getElementById('show' + el).innerHTML = ' 帳號 :' + returnmsg.email + ' , 姓名 : ' + returnmsg.name + ' , 更新時間 ：' + returnmsg.updated_at + '<br><br>' + ' 標題 : ' + returnmsg.title;
-                document.getElementById('msg' + el).innerHTML = returnmsg.msg;
+                if (!returnmsg.id) {
+                    alert(returnmsg.msg);
+                } else {
+                    var el = returnmsg.id;
+                    document.getElementById('show' + el).innerHTML = ' 帳號 :' + returnmsg.email + ' , 姓名 : ' + returnmsg.name + ' , 更新時間 ：' + returnmsg.updated_at + '<br><br>' + ' 標題 : ' + returnmsg.title;
+                    document.getElementById('msg' + el).innerHTML = returnmsg.msg;
+                }
             })
             .fail(function(err) {
                 alert("错誤");
