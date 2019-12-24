@@ -62,8 +62,8 @@ return [
     */
 
     'from' => [
-        'address' => 'yu-min@i-fit.com.tw',
-        'name' => 'SU YU MIN',
+        'address' => '',
+        'name' => '',
     ],
 
     /*
@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'username' => 'yu-min@i-fit.com.tw' ,
+    'username' => '' ,
 
     'password' => 'nvhrusfljqrvworc',
 
