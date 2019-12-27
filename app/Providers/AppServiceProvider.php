@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->registerPolicies($gate);
         $gate->define('update-post', function ($user, $test) {//權限--是否為相同使用者
-            return $user->id === $test->id;
+            return $user->email === $test->email;
         });
     }
 }

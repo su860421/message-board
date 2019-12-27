@@ -133,6 +133,9 @@ $(document).ready(function() {
                 if (!returnmsg.id) {
                     alert(returnmsg.msg);
                 } else {
+                  $("#modifymsg").find(":text,textarea").each(function() {//修改後文字還在上面尚未解決
+                    $(this).val("");
+                  });
                     var el = returnmsg.id;
                     document.getElementById('show' + el).innerHTML = ' 帳號 :' + returnmsg.email + ' , 姓名 : ' + returnmsg.name + ' , 更新時間 ：' + returnmsg.updated_at + '<br><br>' + ' 標題 : ' + returnmsg.title;
                     document.getElementById('msg' + el).innerHTML = returnmsg.msg;

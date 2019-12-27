@@ -17,7 +17,7 @@
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title" id="myModalLabel">修改該筆資料</h4>
               </div>
-              <form class="bs-example bs-example-form" role="form" id="newmsg">
+              <form class="bs-example bs-example-form" role="form" id="modifymsg">
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="" id="modaltitle" style="margin-left:10px;"></br>
                 </div>
