@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 use Auth;
 use DB;
+use Gate;
 use App\Test;
 
 class TestController extends Controller
@@ -109,10 +110,10 @@ class TestController extends Controller
             $return_errlogin_info['msg']="要加雙引號,逗號和{}";
             echo json_encode((array)$return_errlogin_info);
         } else {
+          $verify=Auth::User()->email_verified_at;
           if (Auth::check()&&$verify){
-            $msgaccount=Auth::User()->email;
-            $useradmin=DB::table('tests')->where('id', $r['id'])->value('email');
-            if($msgaccount==$useradmin){
+            $test = Test::findOrFail($request);
+            if(Gate::allows('update-post', $test[0])){
               $log=DB::table('tests')->where('id', $r['id'])->delete();
               return json_encode((array)$r);
             }else{
@@ -159,9 +160,8 @@ class TestController extends Controller
             } else {
               $verify=Auth::User()->email_verified_at;
               if (Auth::check()&&$verify){
-                $msgaccount=Auth::User()->email;
-                $useradmin=DB::table('tests')->where('id', $r['id'])->value('email');
-                if($msgaccount==$useradmin){
+                $test = Test::findOrFail($request);
+                if(Gate::allows('update-post', $test[0])){
                   $log=DB::table('tests')->where('id', $r['id'])->first();
                   return json_encode((array)$log);
                 }else{
